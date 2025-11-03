@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Your Dashboard</h1>
+
+    <!-- Total Footprint -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card text-white bg-primary text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Your Total Footprint</h5>
+                    <p class="card-text fs-2">{{ total_footprint|floatformat:2 }} kg CO2</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Footprint by Category
+                </div>
+                <div class="card-body text-center">
+                    {% if chart_image %}
+                        <img src="data:image/png;base64,{{ chart_image }}" class="img-fluid" alt="Carbon Footprint by Category Chart">
+                    {% else %}
+                        <p class="text-muted">No activity data available to generate a chart.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personalized Tips -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    Personalized Tips
+                </div>
+                <div class="card-body">
+                    {% if tips %}
+                        <ul class="list-group list-group-flush">
+                        {% for tip in tips %}
+                            <li class="list-group-item">{{ tip }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Logs Table -->
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    Recent Activity Logs
+                    <a href="{% url 'export_csv' %}" class="btn btn-sm btn-secondary">Export to CSV</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_logs %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Value</th>
+                                        <th scope="col">CO2 Equivalent (kg)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in recent_logs %}
+                                        <tr>
+                                            <td>{{ log.date }}</td>
+                                            <td>{{ log.get_category_display }}</td>
+                                            <td>{{ log.value }}</td>
+                                            <td>{{ log.carbon_equivalent|floatformat:2 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">You haven't logged any activities yet. <a href="{% url 'add_activity' %}">Add one now!</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
