@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-l$y-6#+c0kh$033fg^f=1ip!^^b+_=jatav6$r#l!-=o8trf5+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['carbon-tracker-bla3.onrender.com', '127.0.0.1']
 
 
 # Application definition
