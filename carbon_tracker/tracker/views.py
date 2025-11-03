@@ -87,6 +87,12 @@ def add_activity(request):
 
             activity.save()
             return redirect('dashboard')
+    else:
+        form = ActivityLogForm()
+    
+    return render(request, 'add_activity.html', {'form': form})
+
+
 from django.http import HttpResponse
 import csv
 
