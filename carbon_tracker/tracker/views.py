@@ -87,13 +87,13 @@ def add_activity(request):
             category = form.cleaned_data['category']
             value = form.cleaned_data['value']
             if category == 'transport':
-                activity.carbon_equivalent = value * 0.21
+                activity.carbon_equivalent = value * 0.103
             elif category == 'electricity':
-                activity.carbon_equivalent = value * 0.45
+                activity.carbon_equivalent = value * 0.82
             elif category == 'food':
-                activity.carbon_equivalent = value * 5.0
+                activity.carbon_equivalent = value * 2.983
             elif category == 'waste':
-                activity.carbon_equivalent = value * 0.5
+                activity.carbon_equivalent = value * 0.12
             else:
                 activity.carbon_equivalent = 0  # Default or error case
 
