@@ -6,13 +6,35 @@
 <div class="container">
     <h1 class="my-4">Your Dashboard</h1>
 
-    <!-- Total Footprint -->
-    <div class="row mb-4">
+    <!-- Totals and Goal -->
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
         <div class="col">
-            <div class="card text-white bg-primary text-center">
+            <div class="card text-white bg-primary text-center h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Your Total Footprint</h5>
+                    <h5 class="card-title">Total Footprint</h5>
                     <p class="card-text fs-2">{{ total_footprint|floatformat:2 }} kg CO2</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-white bg-info text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">This Month's Footprint</h5>
+                    <p class="card-text fs-2">{{ monthly_footprint|floatformat:2 }} kg CO2</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-white bg-success text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Your Monthly Goal</h5>
+                    {% if current_goal and current_goal.target_footprint > 0 %}
+                        <p class="card-text fs-2">{{ current_goal.target_footprint|floatformat:2 }} kg CO2</p>
+                        <a href="{% url 'set_goal' %}" class="btn btn-light btn-sm">Update Goal</a>
+                    {% else %}
+                        <p class="card-text">No goal set for this month.</p>
+                        <a href="{% url 'set_goal' %}" class="btn btn-light btn-sm">Set Goal</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

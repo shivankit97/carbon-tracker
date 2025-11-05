@@ -1,0 +1,57 @@
+/* Environment-based theme for Carbon Tracker */
+
+:root {
+  --primary-color: #2E7D32; /* Green */
+  --secondary-color: #1976D2; /* Blue */
+  --accent-color: #8D6E63; /* Brown */
+  --background-color: #F5F5F5;
+  --text-color: #333;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+  background-color: var(--primary-color) !important;
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: #1B5E20; /* Darker green */
+  border-color: #1B5E20;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+  background-color: #1565C0; /* Darker blue */
+  border-color: #1565C0;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.bg-success {
+    background-color: var(--secondary-color) !important;
+}
+
+.bg-info {
+    background-color: var(--accent-color) !important;
+}

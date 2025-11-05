@@ -1,5 +1,5 @@
 from django import forms
-from .models import ActivityLog
+from .models import ActivityLog, Goal
 
 class ActivityLogForm(forms.ModelForm):
     """
@@ -17,5 +17,19 @@ class ActivityLogForm(forms.ModelForm):
             ),
             'value': forms.NumberInput(
                 attrs={'class': 'form-control', 'placeholder': 'e.g., 10.5'}
+            ),
+        }
+
+
+class GoalForm(forms.ModelForm):
+    """
+    Form for setting a user's carbon footprint goal.
+    """
+    class Meta:
+        model = Goal
+        fields = ['target_footprint']
+        widgets = {
+            'target_footprint': forms.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': 'e.g., 1000'}
             ),
         }

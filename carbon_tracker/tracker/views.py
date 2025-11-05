@@ -3,8 +3,9 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Sum
-from .forms import ActivityLogForm
-from .models import ActivityLog
+from datetime import date
+from .forms import ActivityLogForm, GoalForm
+from .models import ActivityLog, Goal
 
 def register(request):
     """
@@ -50,12 +51,23 @@ def dashboard(request):
     # Generate personalized tips
     tips = generate_personalized_tips(category_summary)
 
+    # Calculate monthly footprint
+    today = date.today()
+    first_day_of_month = today.replace(day=1)
+    monthly_logs = logs.filter(date__gte=first_day_of_month)
+    monthly_footprint = monthly_logs.aggregate(total=Sum('carbon_equivalent'))['total'] or 0
+
+    # Get the current month's goal
+    current_goal = Goal.objects.filter(user=request.user, month=first_day_of_month).first()
+
     context = {
         'recent_logs': logs.order_by('-date')[:10],  # Pass last 10 logs
         'total_footprint': total_footprint,
+        'monthly_footprint': monthly_footprint,
         'category_summary': category_summary,
         'chart_image': chart_image,
         'tips': tips,
+        'current_goal': current_goal,
     }
 
     return render(request, 'dashboard.html', context)
@@ -114,3 +126,33 @@ def export_csv(request):
         writer.writerow([log.date, log.get_category_display(), log.value, log.carbon_equivalent])
 
     return response
+
+
+@login_required
+def set_goal(request):
+    """
+    Allow users to set their monthly carbon footprint goal.
+    """
+    today = date.today()
+    first_day_of_month = today.replace(day=1)
+
+    # Get or create a goal for the current user and month
+    goal, created = Goal.objects.update_or_create(
+        user=request.user,
+        month=first_day_of_month,
+        defaults={'target_footprint': 0}
+    )
+
+    if request.method == 'POST':
+        form = GoalForm(request.POST, instance=goal)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        # If a goal exists, pre-fill the form. Otherwise, show a blank form.
+        if not created:
+            form = GoalForm(instance=goal)
+        else:
+            form = GoalForm()
+
+    return render(request, 'set_goal.html', {'form': form})

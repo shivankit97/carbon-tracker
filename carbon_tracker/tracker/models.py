@@ -28,3 +28,19 @@ class ActivityLog(models.Model):
         verbose_name = "Activity Log"
         verbose_name_plural = "Activity Logs"
         ordering = ['-date']
+
+
+class Goal(models.Model):
+    """
+    Represents a user's carbon footprint goal for a specific month.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='goals')
+    month = models.DateField(help_text="First day of the month for the goal.")
+    target_footprint = models.FloatField(help_text="Target CO2 in kg.")
+
+    def __str__(self):
+        return f"{self.user.username}'s goal for {self.month.strftime('%B %Y')}: {self.target_footprint} kg CO2"
+
+    class Meta:
+        unique_together = ('user', 'month')
+        ordering = ['-month']
