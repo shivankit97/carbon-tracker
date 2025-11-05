@@ -96,6 +96,7 @@
                                         <th scope="col">Category</th>
                                         <th scope="col">Value</th>
                                         <th scope="col">CO2 Equivalent (kg)</th>
+                                        <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,6 +106,9 @@
                                             <td>{{ log.get_category_display }}</td>
                                             <td>{{ log.value }}</td>
                                             <td>{{ log.carbon_equivalent|floatformat:2 }}</td>
+                                            <td>
+                                                <a href="{% url 'delete_activity' log.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

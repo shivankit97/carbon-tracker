@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -103,6 +103,18 @@ def add_activity(request):
         form = ActivityLogForm()
     
     return render(request, 'add_activity.html', {'form': form})
+
+
+@login_required
+def delete_activity(request, activity_id):
+    """
+    Delete an activity log.
+    """
+    activity = get_object_or_404(ActivityLog, id=activity_id, user=request.user)
+    if request.method == 'POST':
+        activity.delete()
+        return redirect('dashboard')
+    return render(request, 'confirm_delete.html', {'activity': activity})
 
 
 from django.http import HttpResponse
